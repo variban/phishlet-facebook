@@ -31,9 +31,7 @@ login:
   domain: 'm.facebook.com'
   path: '/login.php'
 
-force_post:
-  - domain: 'm.facebook.com'
-    path: '/login.php'
+force_post: true
 
 headers:
   - domain: 'm.facebook.com'
