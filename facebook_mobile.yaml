@@ -31,7 +31,9 @@ login:
   domain: 'm.facebook.com'
   path: '/login.php'
 
-force_post: true
+force_post:
+  - domain: 'm.facebook.com'
+    path: '/login.php'
 
 headers:
   - domain: 'm.facebook.com'
@@ -43,4 +45,3 @@ headers:
       Sec-Fetch-Mode: 'navigate'
       Sec-Fetch-User: '?1'
       Upgrade-Insecure-Requests: '1'
-
